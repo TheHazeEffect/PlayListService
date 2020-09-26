@@ -23,8 +23,8 @@ push_Image_to_GitlabRegsitry:
     before_script:
         - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} 
     script:
-        - docker build -t ${CI_REGISTRY}/troyanderson.d/${REPOSITORY_NAME}:latest -f PlaylistService.Web/dockerfiles/Dockerfile PlaylistService.Web
-        - docker push ${CI_REGISTRY}/troyanderson.d/${REPOSITORY_NAME}:latest
+        - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest -f PlaylistService.Web/dockerfiles/Dockerfile PlaylistService.Web
+        - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
     after_script:
         - docker logout ${CI_REGISTRY)}
     tags:
@@ -37,10 +37,10 @@ deploy_to_heroku:
     stage: deploy
     before_script:
         - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
-        - docker pull ${CI_REGISTRY}/troyanderson.d/${REPOSITORY_NAME}:latest
+        - docker pull ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
     script:
         - docker login --username=troyanderson.d@gmail.com --password=$HEROKU_API_KEY registry.heroku.com
-        - docker tag  ${CI_REGISTRY}/troyanderson.d/${REPOSITORY_NAME}:latest registry.heroku.com/PlaylistService/web:latest
+        - docker tag  ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest registry.heroku.com/PlaylistService/web:latest
         - docker push registry.heroku.com/PlaylistService/web:latest
         - "docker run --rm -e HEROKU_API_KEY=$HEROKU_API_KEY wingrunr21/alpine-heroku-cli container:release web --app=PlaylistService"
     after_script:
