@@ -10,6 +10,7 @@ services:
 
 variables:
     REPOSITORYNAME: "troyanderson.d/playlistservice"
+    HerokuAppName: "playlistservice"
 
   
 test:
@@ -43,9 +44,9 @@ deploy_to_heroku:
         - docker pull ${CI_REGISTRY}/${REPOSITORYNAME}:latest
     script:
         - docker login --username=troyanderson.d@gmail.com --password=$HEROKU_API_KEY registry.heroku.com
-        - docker tag  ${CI_REGISTRY}/${REPOSITORYNAME}:latest registry.heroku.com/playlistservice/web:latest
-        - docker push registry.heroku.com/playlistservice/web:latest
-        - "docker run --rm -e HEROKU_API_KEY=$HEROKU_API_KEY wingrunr21/alpine-heroku-cli container:release web --app=playlistService"
+        - docker tag  ${CI_REGISTRY}/${REPOSITORYNAME}:latest registry.heroku.com/${HerokuAppName}/web:latest
+        - docker push registry.heroku.com/${HerokuAppName}/web:latest
+        - "docker run --rm -e HEROKU_API_KEY=$HEROKU_API_KEY wingrunr21/alpine-heroku-cli container:release web --app=${HerokuAppName}"
     after_script:
         - docker logout registry.heroku.com
     
