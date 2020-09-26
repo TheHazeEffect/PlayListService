@@ -26,7 +26,7 @@ push_Image_to_GitlabRegsitry:
     before_script:
         - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} 
     script:
-        - docker build -t ${CI_REGISTRY}/${REPOSITORYNAME}:latest -f PlaylistService.Web/dockerfiles/Dockerfile PlaylistService.Web
+        - docker build -t ${CI_REGISTRY}/${REPOSITORYNAME}:latest -f PlaylistService.Web/Docker/Dockerfile PlaylistService.Web
         - docker push ${CI_REGISTRY}/${REPOSITORYNAME}:latest
     after_script:
         - docker logout ${CI_REGISTRY)}
