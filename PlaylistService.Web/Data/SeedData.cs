@@ -17,7 +17,7 @@ namespace PlayListService.Web.Data
             _context = context;
         }
 
-         public static async Task InitializeAsync(IServiceProvider services)
+        public static async Task InitializeAsync(IServiceProvider services)
         {
             var dbContext = services.GetRequiredService<PlayListServiceContext>();
             
