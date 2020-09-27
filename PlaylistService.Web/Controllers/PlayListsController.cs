@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlayListService.Web.Models;
 using PlayListService.Web.Data;
+using PlayListService.Web.Dtos;
 
 namespace PlayListService.Web.Controllers
 {
@@ -30,11 +31,21 @@ namespace PlayListService.Web.Controllers
 
         // GET: api/PlayLists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PlayList>> GetPlayList(int id)
+        public async Task<ActionResult<PlayListDto>> GetPlayList(int id)
         {
             var playList = await _context.Playlists
                 .Include(P => P.PlayListSongs)
                 .ThenInclude(ps => ps.Song)
+                .Select(p => new PlayListDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Songs = p.PlayListSongs.Select(pl => new SongDto
+                    {
+                        Id = pl.Song.Id,
+                        Url = pl.Song.Url
+                    }).ToList()
+                })
                 .FirstOrDefaultAsync(P => P.Id == id);
 
             if (playList == null)
